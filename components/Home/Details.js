@@ -11,13 +11,14 @@ import { useEffect, useState } from "react";
 
 const Details = ({route, navigation}) => {
 
-  const { item } = route.params;
+  let { item } = route.params;
   const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
   const [selected, setSelected] = useState(item.sizeOptions[0]);
 
   useEffect(() => {
     setIsFavorite(checkIfFavorite());
+    onClickSizeOptions(item.sizeOptions[0])
   }, [])
 
   const onClickOrderButton = () =>{
@@ -45,12 +46,20 @@ const Details = ({route, navigation}) => {
     return false;
   }
 
+  const onClickSizeOptions = (sizeOption) =>
+  {
+    setSelected(sizeOption)
+    item = {
+      ...item,
+      selectedSize: sizeOption,
+    }
+  }
 
   const renderSizeOptions = () => {
     return (
-      item.sizeOptions.map((size) =>
-        <TouchableOpacity style={[styles.sizeOptionButton, selected === size ? { backgroundColor: colors.primary } : { }]} onPress={() => setSelected(size)}>
-          <Text style={styles.sizeText}>{size}</Text>
+      item.sizeOptions.map((sizeOption) =>
+        <TouchableOpacity key={sizeOption} style={[styles.sizeOptionButton, selected === sizeOption ? { backgroundColor: colors.primary } : { }]} onPress={() => onClickSizeOptions(sizeOption)}>
+          <Text style={styles.sizeText}>{sizeOption}</Text>
         </TouchableOpacity>)
       )
   }

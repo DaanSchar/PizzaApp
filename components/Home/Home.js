@@ -42,6 +42,16 @@ const Home = ({ navigation }) => {
     dispatch(cartActions.addToCart(item));
   }
 
+  const onClickAdd = (item) => {
+
+    item = {
+      ...item,
+      selectedSize: item.sizeOptions[0],
+    }
+
+    addToCart(item)
+  }
+
   // returns the data based on which category is selected
   const getItemData = () => {
     if (selected === '')
@@ -187,7 +197,7 @@ const Home = ({ navigation }) => {
                   <Feather name='star'/>
                 </View>
 
-                <TouchableOpacity style={styles.addButton} onPress={() => addToCart(item)}>
+                <TouchableOpacity style={styles.addButton} onPress={() => onClickAdd(item)}>
                   <Feather name='plus'/>
                 </TouchableOpacity>
               </View>

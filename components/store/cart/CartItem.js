@@ -6,6 +6,7 @@ class CartItem{
     this.title = item.title;
     this.id = item.id;
     this.quantity = quantity;
+    this.size = item.selectedSize;
   }
 
 }
