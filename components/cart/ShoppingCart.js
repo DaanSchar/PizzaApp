@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 25,
   },
   addButton: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.primary,
     paddingHorizontal: 40,
     paddingVertical: 20,
     borderTopLeftRadius: 25,

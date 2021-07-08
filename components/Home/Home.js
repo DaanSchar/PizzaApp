@@ -38,6 +38,25 @@ const Home = ({ navigation }) => {
 
   const favorites = store.getState().favorites.items;
 
+
+  const quickConsole = () => {
+    let item = getItemData()[0];
+
+
+      // item.sizeOptions.map((index) => {
+      //   Object.keys(index).map((size) => {
+      //     console.log(size);
+      //   })
+      // })
+    item.sizeOptions.map((index) => {
+      Object.keys(index).map((size) => {
+        console.log(size)
+      })
+    })
+
+
+  }
+
   const addToCart = (item) => {
     dispatch(cartActions.addToCart(item));
   }
@@ -89,7 +108,10 @@ const Home = ({ navigation }) => {
 
   const renderItemSizeOptions = (item) => {
     return (
-        item.sizeOptions.map((size) => <Text style={styles.sizeText}>{size}</Text>)
+        item.sizeOptions.map((index) =>
+          Object.keys(index).map((size) =>
+          <Text key={size} style={styles.sizeText}>{size}</Text>)
+        )
     )
   }
 
@@ -131,7 +153,11 @@ const Home = ({ navigation }) => {
 
       {/* Titles */}
       <View style={styles.titleWrapper}>
+
+        <TouchableOpacity onPress={() => quickConsole()}>
         <Text style={styles.titleSubTitle}>Food</Text>
+        </TouchableOpacity>
+
         <Text style={styles.titlesTitle}t>Delivery</Text>
       </View>
 
@@ -180,7 +206,7 @@ const Home = ({ navigation }) => {
 
                 <View style={styles.titleItemWrapper}>
                   <Text style={styles.itemNameTitle}>{item.title}</Text>
-                  <Text style={styles.itemPriceTitle}>{item.price}$</Text>
+                  <Text style={styles.itemPriceTitle}>{Object.values(item.sizeOptions[0])}$</Text>
 
                     <View style={styles.sizeWrapper}>
                       { renderItemSizeOptions(item) }

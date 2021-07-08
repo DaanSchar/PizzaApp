@@ -97,6 +97,7 @@ const Details = ({route, navigation}) => {
           <View style={styles.infoLeftWrapper}>
 
             <View style={styles.infoItemWrapper}>
+
               <Text style={styles.infoItemTitle}>Size</Text>
               <View style={styles.sizeOptionWrapper}>
                 {
@@ -104,22 +105,9 @@ const Details = ({route, navigation}) => {
                 }
               </View>
 
-
-            </View>
-
-            <View style={styles.infoItemWrapper}>
-              <Text style={styles.infoItemTitle}>Crust</Text>
-              <Text style={styles.infoItemText}>crust</Text>
-            </View>
-
-            <View style={styles.infoItemWrapper}>
-              <Text style={styles.infoItemTitle}>Delivery in</Text>
-              <Text style={styles.infoItemText}>{item.deliveryTime} min.</Text>
             </View>
 
           </View>
-
-
         </View>
 
 
