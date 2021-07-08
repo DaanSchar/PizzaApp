@@ -47,7 +47,8 @@ const Home = ({ navigation }) => {
 
     item = {
       ...item,
-      selectedSize: item.sizeOptions[0],
+      size: Object.keys(item.sizeOptions)[0],
+      price: Object.values(item.sizeOptions)[0]
     }
 
     addToCart(item)
