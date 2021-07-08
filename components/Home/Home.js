@@ -39,24 +39,6 @@ const Home = ({ navigation }) => {
   const favorites = store.getState().favorites.items;
 
 
-  const quickConsole = () => {
-    let item = getItemData()[0];
-
-
-      // item.sizeOptions.map((index) => {
-      //   Object.keys(index).map((size) => {
-      //     console.log(size);
-      //   })
-      // })
-    item.sizeOptions.map((index) => {
-      Object.keys(index).map((size) => {
-        console.log(size)
-      })
-    })
-
-
-  }
-
   const addToCart = (item) => {
     dispatch(cartActions.addToCart(item));
   }
@@ -96,6 +78,10 @@ const Home = ({ navigation }) => {
 
   const getTitle = () => {
     return selected;
+  }
+
+  const getItemPrice = (item) => {
+    return Object.values(item.sizeOptions[0]);
   }
 
   // sets the selected category item
@@ -154,10 +140,7 @@ const Home = ({ navigation }) => {
       {/* Titles */}
       <View style={styles.titleWrapper}>
 
-        <TouchableOpacity onPress={() => quickConsole()}>
         <Text style={styles.titleSubTitle}>Food</Text>
-        </TouchableOpacity>
-
         <Text style={styles.titlesTitle}t>Delivery</Text>
       </View>
 
@@ -206,7 +189,7 @@ const Home = ({ navigation }) => {
 
                 <View style={styles.titleItemWrapper}>
                   <Text style={styles.itemNameTitle}>{item.title}</Text>
-                  <Text style={styles.itemPriceTitle}>{Object.values(item.sizeOptions[0])}$</Text>
+                  <Text style={styles.itemPriceTitle}>{getItemPrice(item)}$</Text>
 
                     <View style={styles.sizeWrapper}>
                       { renderItemSizeOptions(item) }

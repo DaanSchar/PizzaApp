@@ -57,11 +57,17 @@ const Details = ({route, navigation}) => {
 
   const renderSizeOptions = () => {
     return (
-      item.sizeOptions.map((sizeOption) =>
-        <TouchableOpacity key={sizeOption} style={[styles.sizeOptionButton, selected === sizeOption ? { backgroundColor: colors.primary } : { }]} onPress={() => onClickSizeOptions(sizeOption)}>
-          <Text style={styles.sizeText}>{sizeOption}</Text>
+      item.sizeOptions.map((index) =>
+        Object.keys(index).map((size) =>
+        <TouchableOpacity key={size} style={[styles.sizeOptionButton, selected === size ? { backgroundColor: colors.primary } : { }]} onPress={() => onClickSizeOptions(size)}>
+          <Text style={styles.sizeText}>{size}</Text>
         </TouchableOpacity>)
       )
+    )
+  }
+
+  const getItemPrice = (item) => {
+    return Object.values(item.sizeOptions[0]);
   }
 
   return(
@@ -89,7 +95,7 @@ const Details = ({route, navigation}) => {
 
         {/*  Price*/}
         <View style={styles.priceWrapper}>
-          <Text style={styles.priceText}>${item.price}</Text>
+          <Text style={styles.priceText}>${getItemPrice(item)}</Text>
         </View>
 
         {/*  Food info */}
