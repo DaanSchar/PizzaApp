@@ -14,14 +14,17 @@ const Details = ({route, navigation}) => {
   let { item } = route.params;
   const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selected, setSelected] = useState(item.sizeOptions[0]);
+  const [selected, setSelected] = useState(Object.keys(item.sizeOptions)[0]);
+
 
   useEffect(() => {
     setIsFavorite(checkIfFavorite());
-    onClickSizeOptions(item.sizeOptions[0])
+    onClickSizeOptions(Object.keys(item.sizeOptions)[0])
   }, [])
 
+
   const onClickOrderButton = () =>{
+    onClickSizeOptions(selected);
     dispatch(cartActions.addToCart(item));
   }
 
@@ -58,18 +61,17 @@ const Details = ({route, navigation}) => {
 
   const renderSizeOptions = () => {
     return (
-      item.sizeOptions.map((index) =>
-        Object.keys(index).map((size) =>
+        Object.keys(item.sizeOptions).map((size) =>
         <TouchableOpacity key={size} style={[styles.sizeOptionButton, selected === size ? { backgroundColor: colors.primary } : { }]} onPress={() => onClickSizeOptions(size)}>
           <Text style={styles.sizeText}>{size}</Text>
         </TouchableOpacity>)
-      )
     )
   }
 
-  const getItemPrice = (item) => {
-    return Object.values(item.sizeOptions[0]);
+  const getItemPrice = (item, size) => {
+    return item.sizeOptions[size];
   }
+
 
   return(
     <ScrollView>
@@ -96,7 +98,7 @@ const Details = ({route, navigation}) => {
 
         {/*  Price*/}
         <View style={styles.priceWrapper}>
-          <Text style={styles.priceText}>${getItemPrice(item)}</Text>
+          <Text style={styles.priceText}>${getItemPrice(item, selected)}</Text>
         </View>
 
         {/*  Food info */}
