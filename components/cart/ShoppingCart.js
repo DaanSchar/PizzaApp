@@ -39,7 +39,7 @@ const ShoppingCart = ({ navigation }) => {
     setCart(
       {
         ...cart,
-        items: { ...cart.items, [item.id]: new CartItem(cart.items[item.id], cart.items[item.id].quantity+1), },
+        items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity+1), },
         totalPrice: Math.round((cart.totalPrice + parseFloat(item.price)) * 100)/100,
         totalCount: cart.totalCount + 1,
       });
@@ -49,7 +49,7 @@ const ShoppingCart = ({ navigation }) => {
   const decrementItemQuantity = (item) => {
     setCart({
       ...cart,
-      items: { ...cart.items, [item.id]: new CartItem(cart.items[item.id], cart.items[item.id].quantity - 1), },
+      items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity - 1), },
       totalPrice: Math.round((cart.totalPrice - parseFloat(item.price)) * 100)/100,
       totalCount: cart.totalCount - 1,
     });
@@ -76,8 +76,15 @@ const ShoppingCart = ({ navigation }) => {
     }
 
     dispatch(cartActions.removeFromCart(item));
-    delete cartCopyObject.items[item.id]
+    delete cartCopyObject.items[itemIndex(item)]
     setCart(cartCopyObject);
+  }
+
+  const itemIndex = (item) => {
+    let index = item.id + item.size
+    console.log(index);
+
+    return index
   }
 
   return (
@@ -110,7 +117,7 @@ const ShoppingCart = ({ navigation }) => {
               <View style={styles.topSideWrapper}>
 
                 <View style={styles.titleItemWrapper}>
-                  <Text style={styles.itemNameTitle}>{item.title}</Text>
+                  <Text style={styles.itemNameTitle}>{item.title} {item.size}</Text>
                   <Text style={styles.itemPriceTitle}>{item.price}$</Text>
 
                 </View>
@@ -260,7 +267,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 25,
   },
   addButton: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.primary,
     paddingHorizontal: 40,
     paddingVertical: 20,
     borderTopLeftRadius: 25,

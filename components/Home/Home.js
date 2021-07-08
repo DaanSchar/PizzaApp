@@ -38,8 +38,20 @@ const Home = ({ navigation }) => {
 
   const favorites = store.getState().favorites.items;
 
+
   const addToCart = (item) => {
     dispatch(cartActions.addToCart(item));
+  }
+
+  const onClickAdd = (item) => {
+
+    item = {
+      ...item,
+      size: Object.keys(item.sizeOptions)[0],
+      price: Object.values(item.sizeOptions)[0]
+    }
+
+    addToCart(item)
   }
 
   // returns the data based on which category is selected
@@ -69,6 +81,10 @@ const Home = ({ navigation }) => {
     return selected;
   }
 
+  const getItemPrice = (item) => {
+    return Object.values(item.sizeOptions)[0]
+  }
+
   // sets the selected category item
   const selectCategoryItem = ({ item }) => {
     if (selected === item.title)
@@ -78,9 +94,11 @@ const Home = ({ navigation }) => {
   }
 
   const renderItemSizeOptions = (item) => {
+
     return (
-        item.sizeOptions.map((size) => <Text style={styles.sizeText}>{size}</Text>)
-    )
+          Object.keys(item.sizeOptions).map((size) =>
+          <Text key={size} style={styles.sizeText}>{size}</Text>)
+        )
   }
 
 
@@ -121,6 +139,7 @@ const Home = ({ navigation }) => {
 
       {/* Titles */}
       <View style={styles.titleWrapper}>
+
         <Text style={styles.titleSubTitle}>Food</Text>
         <Text style={styles.titlesTitle}t>Delivery</Text>
       </View>
@@ -170,7 +189,7 @@ const Home = ({ navigation }) => {
 
                 <View style={styles.titleItemWrapper}>
                   <Text style={styles.itemNameTitle}>{item.title}</Text>
-                  <Text style={styles.itemPriceTitle}>{item.price}$</Text>
+                  <Text style={styles.itemPriceTitle}>{getItemPrice(item)}$</Text>
 
                     <View style={styles.sizeWrapper}>
                       { renderItemSizeOptions(item) }
@@ -187,7 +206,7 @@ const Home = ({ navigation }) => {
                   <Feather name='star'/>
                 </View>
 
-                <TouchableOpacity style={styles.addButton} onPress={() => addToCart(item)}>
+                <TouchableOpacity style={styles.addButton} onPress={() => onClickAdd(item)}>
                   <Feather name='plus'/>
                 </TouchableOpacity>
               </View>

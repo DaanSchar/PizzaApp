@@ -21,8 +21,8 @@ export default (state = initialState, action) => {
 
 const addItemToState = (state, item) => {
 
-  if (state.items[item.id]) {
-    state.items[item.id].quantity += 1;
+  if (state.items[itemIndex(item)]) {
+    state.items[itemIndex(item)].quantity += 1;
     state.totalPrice = Math.round((state.totalPrice + parseFloat(item.price)) * 100)/100,
     state.totalCount = state.totalCount + 1
 
@@ -32,7 +32,7 @@ const addItemToState = (state, item) => {
       ...state,
       items: {
         ...state.items,
-        [item.id]: new CartItem(item, 1),
+        [itemIndex(item)]: new CartItem(item, 1),
       },
       totalPrice: state.totalPrice + parseFloat(item.price),
       totalCount: state.totalCount + 1,
@@ -45,18 +45,25 @@ const addItemToState = (state, item) => {
 
 const removeItemFromState = (state, item) => {
 
-  if (state.items[item.id].quantity === 1) {
-    delete state.items[item.id];
+  if (state.items[itemIndex(item)].quantity === 1) {
+    delete state.items[itemIndex(item)];
     state.totalPrice = Math.round((state.totalPrice - parseFloat(item.price)) * 100)/100,
     state.totalCount = state.totalCount - 1;
   }
 
-  else if (state.items[item.id].quantity > 1) {
-    state.items[item.id].quantity -= 1;
+  else if (state.items[itemIndex(item)].quantity > 1) {
+    state.items[itemIndex(item)].quantity -= 1;
     state.totalPrice = Math.round((state.totalPrice - parseFloat(item.price)) * 100)/100,
     state.totalCount = state.totalCount - 1;
   }
 
   return state;
+}
+
+const itemIndex = (item) => {
+  let index = item.id + item.size
+  console.log(index);
+
+  return index
 }
 

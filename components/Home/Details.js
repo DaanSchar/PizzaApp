@@ -11,16 +11,20 @@ import { useEffect, useState } from "react";
 
 const Details = ({route, navigation}) => {
 
-  const { item } = route.params;
+  let { item } = route.params;
   const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selected, setSelected] = useState(item.sizeOptions[0]);
+  const [selected, setSelected] = useState(Object.keys(item.sizeOptions)[0]);
+
 
   useEffect(() => {
     setIsFavorite(checkIfFavorite());
+    onClickSizeOptions(Object.keys(item.sizeOptions)[0])
   }, [])
 
+
   const onClickOrderButton = () =>{
+    onClickSizeOptions(selected);
     dispatch(cartActions.addToCart(item));
   }
 
@@ -45,15 +49,29 @@ const Details = ({route, navigation}) => {
     return false;
   }
 
+  const onClickSizeOptions = (sizeOption) =>
+  {
+    setSelected(sizeOption)
+    item = {
+      ...item,
+      size: sizeOption,
+      price: item.sizeOptions[sizeOption],
+    }
+  }
 
   const renderSizeOptions = () => {
     return (
-      item.sizeOptions.map((size) =>
-        <TouchableOpacity style={[styles.sizeOptionButton, selected === size ? { backgroundColor: colors.primary } : { }]} onPress={() => setSelected(size)}>
+        Object.keys(item.sizeOptions).map((size) =>
+        <TouchableOpacity key={size} style={[styles.sizeOptionButton, selected === size ? { backgroundColor: colors.primary } : { }]} onPress={() => onClickSizeOptions(size)}>
           <Text style={styles.sizeText}>{size}</Text>
         </TouchableOpacity>)
-      )
+    )
   }
+
+  const getItemPrice = (item, size) => {
+    return item.sizeOptions[size];
+  }
+
 
   return(
     <ScrollView>
@@ -80,7 +98,7 @@ const Details = ({route, navigation}) => {
 
         {/*  Price*/}
         <View style={styles.priceWrapper}>
-          <Text style={styles.priceText}>${item.price}</Text>
+          <Text style={styles.priceText}>${getItemPrice(item, selected)}</Text>
         </View>
 
         {/*  Food info */}
@@ -88,6 +106,7 @@ const Details = ({route, navigation}) => {
           <View style={styles.infoLeftWrapper}>
 
             <View style={styles.infoItemWrapper}>
+
               <Text style={styles.infoItemTitle}>Size</Text>
               <View style={styles.sizeOptionWrapper}>
                 {
@@ -95,22 +114,9 @@ const Details = ({route, navigation}) => {
                 }
               </View>
 
-
-            </View>
-
-            <View style={styles.infoItemWrapper}>
-              <Text style={styles.infoItemTitle}>Crust</Text>
-              <Text style={styles.infoItemText}>crust</Text>
-            </View>
-
-            <View style={styles.infoItemWrapper}>
-              <Text style={styles.infoItemTitle}>Delivery in</Text>
-              <Text style={styles.infoItemText}>{item.deliveryTime} min.</Text>
             </View>
 
           </View>
-
-
         </View>
 
 
