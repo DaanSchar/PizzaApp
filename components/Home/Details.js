@@ -51,7 +51,8 @@ const Details = ({route, navigation}) => {
     setSelected(sizeOption)
     item = {
       ...item,
-      selectedSize: sizeOption,
+      size: sizeOption,
+      price: item.sizeOptions[sizeOption],
     }
   }
 

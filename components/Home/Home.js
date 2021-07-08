@@ -81,7 +81,7 @@ const Home = ({ navigation }) => {
   }
 
   const getItemPrice = (item) => {
-    return Object.values(item.sizeOptions[0]);
+    return Object.values(item.sizeOptions)[0]
   }
 
   // sets the selected category item
@@ -93,12 +93,11 @@ const Home = ({ navigation }) => {
   }
 
   const renderItemSizeOptions = (item) => {
+
     return (
-        item.sizeOptions.map((index) =>
-          Object.keys(index).map((size) =>
+          Object.keys(item.sizeOptions).map((size) =>
           <Text key={size} style={styles.sizeText}>{size}</Text>)
         )
-    )
   }
 
 
