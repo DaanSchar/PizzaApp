@@ -9,7 +9,7 @@ import BackButton from "../BackButton";
 import store from "../../store/store";
 import { useEffect, useState } from "react";
 
-const Details = ({route, navigation}) => {
+const Details = ({route, navigation, addToCart}) => {
 
   /**
    *  the add function for the store is called
@@ -20,7 +20,6 @@ const Details = ({route, navigation}) => {
   const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
   const [selected, setSelected] = useState(Object.keys(item.sizeOptions)[0]);
-  const [cart, setCart] = useState(store.getState().cart);
 
 
   useEffect(() => {
@@ -32,7 +31,7 @@ const Details = ({route, navigation}) => {
   const onClickOrderButton = () =>{
     onClickSizeOptions(selected);
     //dispatch(cartActions.addToCart(item));
-    this.props.add();
+    addToCart(item);
   }
 
   // toggles the item's favorite status [true/false]
@@ -139,15 +138,15 @@ const Details = ({route, navigation}) => {
   )
 }
 
-function mapStateToProps(state) {
-  return {
-    cart: state.cart,
-  }
-}
+const mapStateToProps = (item) => ({
+  item: item,
+})
 
-function mapDispatchToProps(dispatch) {
+
+const mapDispatchToProps = (dispatch) => {
+
   return {
-    add : () => dispatch({type:'ADD_TO_CART'})
+    addToCart: (item) => dispatch(cartActions.addToCart(item)),
   }
 }
 
