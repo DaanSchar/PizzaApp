@@ -1,4 +1,3 @@
-
 const initialState = {
   items: [],
   totalCount: 0,
@@ -20,23 +19,33 @@ export default (state = initialState, action) => {
 };
 
 const addItemToState = (state, item) => {
-
-  state = {
+  return  {
     ...state,
     items: [...state.items, item],
-    totalPrice: state.totalPrice += item.price,
-  }
+    totalPrice: refactorPrice(parseFloat(state.totalPrice) + parseFloat(item.price)),
 
-  return state;
+  }
 }
 
 const removeItemFromState = (state, item, index) => {
-
   return  {
     ...state,
     items: state.items.filter((pr, ind) => ind != index),
-    totalPrice: state.totalPrice -= item.price,
+    totalPrice: refactorPrice(parseFloat(state.totalPrice) - parseFloat(item.price)),
   }
+}
+
+const refactorPrice = (totalPrice) => {
+  totalPrice = Math.round(totalPrice * 100) / 100
+
+  if (totalPrice % 1 === 0)
+    return totalPrice.toString() + ".00";
+  else {
+    let decimals = totalPrice.toString().split('.')[1];
+    if (decimals.length === 1)
+        return totalPrice.toString() + '0';
+  }
+  return totalPrice.toString();
 }
 
 

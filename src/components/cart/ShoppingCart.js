@@ -36,7 +36,6 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
     return Object.keys(items).length === 0
   }
 
-
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -81,7 +80,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.quantityContainer}>
-                    <Text style={styles.itemQuantityTitle}>Add notes</Text>
+                    <Text style={styles.itemQuantityTitle}>Notes</Text>
                   </TouchableOpacity>
 
                   <TouchableOpacity style={styles.addButton} onPress={() => onClickAddButton(item)}>
