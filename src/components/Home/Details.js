@@ -11,6 +11,11 @@ import { useEffect, useState } from "react";
 
 const Details = ({route, navigation}) => {
 
+  /**
+   *  the add function for the store is called
+   *  inside onClickOrderButton()
+   */
+
   let { item } = route.params;
   const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
