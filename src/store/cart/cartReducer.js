@@ -1,5 +1,4 @@
-import CartItem from './CartItem'
-import { useEffect } from "react";
+
 const initialState = {
   items: [],
   totalCount: 0,
@@ -22,40 +21,23 @@ export default (state = initialState, action) => {
 
 const addItemToState = (state, item) => {
 
-  if (state.items[itemIndex(item)]) {
-    state.items[itemIndex(item)].quantity += 1;
-    state.totalPrice = Math.round((state.totalPrice + parseFloat(item.price)) * 100)/100,
-    state.totalCount = state.totalCount + 1
-
-  } else {
-
-    return Object.assign({}, state,{
-      ...state,
-      items: {
-        ...state.items,
-        [itemIndex(item)]: new CartItem(item, 1),
-      },
-      totalPrice: state.totalPrice + parseFloat(item.price),
-      totalCount: state.totalCount + 1,
-    })
-
+  state = {
+    ...state,
+    items: [...state.items, item]
   }
 
   return state;
 }
 
+/**
+ * TODO: sort array , dont use quantities.
+ */
+
 const removeItemFromState = (state, item) => {
 
-  if (state.items[itemIndex(item)].quantity === 1) {
-    delete state.items[itemIndex(item)];
-    state.totalPrice = Math.round((state.totalPrice - parseFloat(item.price)) * 100)/100,
-    state.totalCount = state.totalCount - 1;
-  }
-
-  else if (state.items[itemIndex(item)].quantity > 1) {
-    state.items[itemIndex(item)].quantity -= 1;
-    state.totalPrice = Math.round((state.totalPrice - parseFloat(item.price)) * 100)/100,
-    state.totalCount = state.totalCount - 1;
+  return {
+    ...state,
+    items: state.items.filter(stateItem => itemIndex(stateItem) !== itemIndex(item))
   }
 
   return state;

@@ -19,58 +19,31 @@ import { useDispatch } from "react-redux";
 import CartItem from "../../store/cart/CartItem";
 import connect from "react-redux/lib/connect/connect";
 
-const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
+const ShoppingCart = ({ navigation, addToCart, removeFromCart , items}) => {
 
   const dispatch = useDispatch();
-  const [cart, setCart] = useState(store.getState().cart);
-
 
   const onClickAddButton = (item) => {
-    incrementItemQuantity(item);
+    addToCart(item);
   }
 
-  useEffect(() => console.log('CHANGE'), [cart])
+  useEffect(() => console.log('CHANGES'), [items])
 
 
   const onClickRemoveButton = (item) => {
-    if (item.quantity === 1)
-      deleteItem(item);
-    else if (item.quantity > 1)
-      decrementItemQuantity(item);
-  }
-
-  const incrementItemQuantity = (item) => {
-    // setCart(
-    //   {
-    //     ...cart,
-    //     items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity+1), },
-    //     totalPrice: Math.round((cart.totalPrice + parseFloat(item.price)) * 100)/100,
-    //     totalCount: cart.totalCount + 1,
-    //   });
-    addToCart(item);
-    setCart(store.getState().cart);
-  }
-
-  const decrementItemQuantity = (item) => {
-    // setCart({
-    //   ...cart,
-    //   items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity - 1), },
-    //   totalPrice: Math.round((cart.totalPrice - parseFloat(item.price)) * 100)/100,
-    //   totalCount: cart.totalCount - 1,
-    // });
     removeFromCart(item);
-    setCart(store.getState().cart);
   }
+
 
   const isEmpty = () => {
-    if (cart.items === undefined)
+    if (items === undefined)
       return true;
 
-    return Object.keys(cart.items).length === 0
+    return Object.keys(items).length === 0
   }
 
   const deleteItem = (item) => {
-    let cartCopyObject = Object.assign(cart);
+    let cartCopyObject = Object.assign(items);
 
     // you can ignore 'extraData' key in cartCopyObject, as it's only there for the components to refresh
     // when the quantity of an item hits 0 and the view needs to be hidden.
@@ -83,7 +56,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
 
     dispatch(cartActions.removeFromCart(item));
     delete cartCopyObject.items[itemIndex(item)]
-    setCart(cartCopyObject);
+    //setCart(cartCopyObject);
   }
 
   const itemIndex = (item) => {
@@ -116,7 +89,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
         {/* item list */}
         <View style={styles.itemListWrapper}>
           {
-            isEmpty() ? null : Object.entries(cart.items).map(([id, item]) =>
+            isEmpty() ? null : Object.entries(items).map(([id, item]) =>
             (
               <View key={id} style={styles.itemWrapper}>
               <View style={styles.topSideWrapper}>
@@ -151,7 +124,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
         {/* pre-checkout bottom part*/}
         { isEmpty() ? null :
           <View style={styles.bottomWrapper}>
-            <Text style={styles.totalPriceTitle}>Total:  {cart.totalPrice} $</Text>
+            <Text style={styles.totalPriceTitle}>Total:  {items.length} $</Text>
               <TouchableOpacity style={styles.payButton}>
                 <Text style={styles.payTitle}>Pay</Text>
                 <Feather name='chevron-right' size={24} color={colors.white}/>
@@ -165,8 +138,8 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
 
 }
 
-const mapStateToProps = (item) => ({
-  item: item,
+const mapStateToProps = ({ cart }) => ({
+  items: cart.items,
 })
 
 
