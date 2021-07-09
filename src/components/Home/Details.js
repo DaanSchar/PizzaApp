@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Image, FlatList, ScrollView } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'
 import colors from "../../../assets/colors/colors";
-import { useDispatch, connect } from "react-redux";
+import { connect } from "react-redux";
 import * as cartActions from '../../store/cart/cartAction'
 import * as favActions from '../../store/favorites/favAction'
 import BackButton from "../BackButton";
 import store from "../../store/store";
 import { useEffect, useState } from "react";
 
-const Details = ({route, navigation, addToCart}) => {
+const Details = ({route, navigation, addToCart, addToFav}) => {
 
   /**
    *  the add function for the store is called
@@ -36,9 +36,9 @@ const Details = ({route, navigation, addToCart}) => {
   const onClickFavButton = () => {
     setIsFavorite(!isFavorite);
     if (!isFavorite)
-      dispatch(favActions.addToFav(item));
+      addToFav(item);
     if (isFavorite)
-      dispatch(favActions.removeFromFav(item));
+      addToFav(item);
   }
 
   // checks if an item is already set as favorite
@@ -136,14 +136,17 @@ const Details = ({route, navigation, addToCart}) => {
   )
 }
 
-const mapStateToProps = (item) => ({
-  item: item,
-})
-
+const mapStateToProps = ({cart, favorites}) => ({
+    items: cart.items,
+    favorites: favorites.items,
+  }
+)
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    dispatch,
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
+    addToFav: (item) => dispatch(favActions.addToFav(item)),
   }
 }
 
