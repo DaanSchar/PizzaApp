@@ -17,7 +17,6 @@ const Details = ({route, navigation, addToCart}) => {
    */
 
   let { item } = route.params;
-  const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
   const [selected, setSelected] = useState(Object.keys(item.sizeOptions)[0]);
 

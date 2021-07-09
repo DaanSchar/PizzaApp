@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
       return addItemToState(state, action.item);
 
     case 'REMOVE_FROM_CART':
-      return removeItemFromState(state, action.item);
+      return removeItemFromState(state, action.item, action.index);
 
     case "SET_CART":
       return action.cart;
@@ -23,29 +23,20 @@ const addItemToState = (state, item) => {
 
   state = {
     ...state,
-    items: [...state.items, item]
+    items: [...state.items, item],
+    totalPrice: state.totalPrice += item.price,
   }
 
   return state;
 }
 
-/**
- * TODO: sort array , dont use quantities.
- */
+const removeItemFromState = (state, item, index) => {
 
-const removeItemFromState = (state, item) => {
-
-  return {
+  return  {
     ...state,
-    items: state.items.filter(stateItem => itemIndex(stateItem) !== itemIndex(item))
+    items: state.items.filter((pr, ind) => ind != index),
+    totalPrice: state.totalPrice -= item.price,
   }
-
-  return state;
 }
 
-const itemIndex = (item) => {
-  let index = item.id + item.size
-
-  return index
-}
 
