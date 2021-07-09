@@ -5,7 +5,7 @@ const foodData = [
     id: '101',
     title: 'Primavera Pizza',
     rating: '5.0',
-    sizeOptions: { "Small" : '7.50', "Medium" : '8.50' , "Large" : '9.50' },
+    sizeOptions: { "Small" : '7.51', "Medium" : '8.51' , "Large" : '9.51' },
     category: 'Pizza'
   },
 

@@ -19,73 +19,21 @@ import { useDispatch } from "react-redux";
 import CartItem from "../../store/cart/CartItem";
 import connect from "react-redux/lib/connect/connect";
 
-const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
-
-  const dispatch = useDispatch();
-  const [cart, setCart] = useState(store.getState().cart);
+const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPrice}) => {
 
 
   const onClickAddButton = (item) => {
-    incrementItemQuantity(item);
-  }
-
-  const onClickRemoveButton = (item) => {
-    if (item.quantity === 1)
-      deleteItem(item);
-    else if (item.quantity > 1)
-      decrementItemQuantity(item);
-  }
-
-  const incrementItemQuantity = (item) => {
-    setCart(
-      {
-        ...cart,
-        items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity+1), },
-        totalPrice: Math.round((cart.totalPrice + parseFloat(item.price)) * 100)/100,
-        totalCount: cart.totalCount + 1,
-      });
     addToCart(item);
   }
 
-  const decrementItemQuantity = (item) => {
-    setCart({
-      ...cart,
-      items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity - 1), },
-      totalPrice: Math.round((cart.totalPrice - parseFloat(item.price)) * 100)/100,
-      totalCount: cart.totalCount - 1,
-    });
-    removeFromCart(item);
+  const onClickRemoveButton = (item, index) => {
+    removeFromCart(item, index);
   }
 
   const isEmpty = () => {
-    if (cart.items === undefined)
+    if (items === undefined)
       return true;
-
-    return Object.keys(cart.items).length === 0
-  }
-
-  const deleteItem = (item) => {
-    let cartCopyObject = Object.assign(cart);
-
-    // you can ignore 'extraData' key in cartCopyObject, as it's only there for the components to refresh
-    // when the quantity of an item hits 0 and the view needs to be hidden.
-    cartCopyObject = {
-      ...cartCopyObject,
-      totalPrice: Math.round((cartCopyObject.totalPrice - parseFloat(item.price)) * 100)/100,
-      totalCount: cartCopyObject.totalCount - 1,
-      extraData: true,
-    }
-
-    dispatch(cartActions.removeFromCart(item));
-    delete cartCopyObject.items[itemIndex(item)]
-    setCart(cartCopyObject);
-  }
-
-  const itemIndex = (item) => {
-    let index = item.id + item.size
-    console.log(index);
-
-    return index
+    return Object.keys(items).length === 0
   }
 
   return (
@@ -98,7 +46,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
 
         <View style={styles.titleWrapper}>
           <Text style={styles.titleHead}>Shopping Cart</Text>
-          <TouchableOpacity onPress={() => console.log(store.getState().cart)}>
+          <TouchableOpacity onPress={() => { console.log(store.getState().cart); }}>
             <Text style={styles.titleSub}>Orders</Text>
           </TouchableOpacity>
         </View>
@@ -112,9 +60,9 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
         {/* item list */}
         <View style={styles.itemListWrapper}>
           {
-            isEmpty() ? null : Object.entries(cart.items).map(([id, item]) =>
+            isEmpty() ? null : Object.entries(items).map(([index, item]) =>
             (
-              <View key={id} style={styles.itemWrapper}>
+              <View key={index} style={styles.itemWrapper}>
               <View style={styles.topSideWrapper}>
 
                 <View style={styles.titleItemWrapper}>
@@ -127,13 +75,13 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
               </View>
                 <View style={styles.functionsWrapper}>
 
-                  <TouchableOpacity style={styles.removeButton} onPress={() => onClickRemoveButton(item)}>
+                  <TouchableOpacity style={styles.removeButton} onPress={() => onClickRemoveButton(item, index)}>
                     <Feather name='minus'/>
                   </TouchableOpacity>
 
-                  <View style={styles.quantityContainer}>
-                    <Text style={styles.itemQuantityTitle}>{item.quantity}</Text>
-                  </View>
+                  <TouchableOpacity style={styles.quantityContainer}>
+                    <Text style={styles.itemQuantityTitle}>Notes</Text>
+                  </TouchableOpacity>
 
                   <TouchableOpacity style={styles.addButton} onPress={() => onClickAddButton(item)}>
                     <Feather name='plus'/>
@@ -147,7 +95,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
         {/* pre-checkout bottom part*/}
         { isEmpty() ? null :
           <View style={styles.bottomWrapper}>
-            <Text style={styles.totalPriceTitle}>Total:  {cart.totalPrice} $</Text>
+            <Text style={styles.totalPriceTitle}>Total:  {totalPrice} $</Text>
               <TouchableOpacity style={styles.payButton}>
                 <Text style={styles.payTitle}>Pay</Text>
                 <Feather name='chevron-right' size={24} color={colors.white}/>
@@ -161,15 +109,17 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
 
 }
 
-const mapStateToProps = (item) => ({
-  item: item,
+const mapStateToProps = ({ cart }) => ({
+  items: cart.items,
+  totalPrice: cart.totalPrice,
 })
 
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    dispatch,
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
-    removeFromCart: (item) => dispatch(cartActions.removeFromCart(item)),
+    removeFromCart: (item, index) => dispatch(cartActions.removeFromCart(item, index)),
   }
 }
 

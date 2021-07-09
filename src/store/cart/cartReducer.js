@@ -1,4 +1,3 @@
-import CartItem from './CartItem'
 const initialState = {
   items: [],
   totalCount: 0,
@@ -11,7 +10,7 @@ export default (state = initialState, action) => {
       return addItemToState(state, action.item);
 
     case 'REMOVE_FROM_CART':
-      return removeItemFromState(state, action.item);
+      return removeItemFromState(state, action.item, action.index);
 
     case "SET_CART":
       return action.cart;
@@ -20,50 +19,33 @@ export default (state = initialState, action) => {
 };
 
 const addItemToState = (state, item) => {
-
-  if (state.items[itemIndex(item)]) {
-    state.items[itemIndex(item)].quantity += 1;
-    state.totalPrice = Math.round((state.totalPrice + parseFloat(item.price)) * 100)/100,
-    state.totalCount = state.totalCount + 1
-
-  } else {
-
-    return {
-      ...state,
-      items: {
-        ...state.items,
-        [itemIndex(item)]: new CartItem(item, 1),
-      },
-      totalPrice: state.totalPrice + parseFloat(item.price),
-      totalCount: state.totalCount + 1,
-    }
+  return  {
+    ...state,
+    items: [...state.items, item],
+    totalPrice: refactorPrice(parseFloat(state.totalPrice) + parseFloat(item.price)),
 
   }
-
-  return state;
 }
 
-const removeItemFromState = (state, item) => {
-
-  if (state.items[itemIndex(item)].quantity === 1) {
-    delete state.items[itemIndex(item)];
-    state.totalPrice = Math.round((state.totalPrice - parseFloat(item.price)) * 100)/100,
-    state.totalCount = state.totalCount - 1;
+const removeItemFromState = (state, item, index) => {
+  return  {
+    ...state,
+    items: state.items.filter((pr, ind) => ind != index),
+    totalPrice: refactorPrice(parseFloat(state.totalPrice) - parseFloat(item.price)),
   }
+}
 
-  else if (state.items[itemIndex(item)].quantity > 1) {
-    state.items[itemIndex(item)].quantity -= 1;
-    state.totalPrice = Math.round((state.totalPrice - parseFloat(item.price)) * 100)/100,
-    state.totalCount = state.totalCount - 1;
+const refactorPrice = (totalPrice) => {
+  totalPrice = Math.round(totalPrice * 100) / 100
+
+  if (totalPrice % 1 === 0)
+    return totalPrice.toString() + ".00";
+  else {
+    let decimals = totalPrice.toString().split('.')[1];
+    if (decimals.length === 1)
+        return totalPrice.toString() + '0';
   }
-
-  return state;
+  return totalPrice.toString();
 }
 
-const itemIndex = (item) => {
-  let index = item.id + item.size
-  console.log(index);
-
-  return index
-}
 
