@@ -17,8 +17,9 @@ import BackButton from "../BackButton";
 import * as cartActions from '../../store/cart/cartAction'
 import { useDispatch } from "react-redux";
 import CartItem from "../../store/cart/CartItem";
+import connect from "react-redux/lib/connect/connect";
 
-const ShoppingCart = ({ navigation }) => {
+const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
 
   const dispatch = useDispatch();
   const [cart, setCart] = useState(store.getState().cart);
@@ -43,7 +44,7 @@ const ShoppingCart = ({ navigation }) => {
         totalPrice: Math.round((cart.totalPrice + parseFloat(item.price)) * 100)/100,
         totalCount: cart.totalCount + 1,
       });
-    dispatch(cartActions.addToCart(item));
+    addToCart(item);
   }
 
   const decrementItemQuantity = (item) => {
@@ -53,7 +54,7 @@ const ShoppingCart = ({ navigation }) => {
       totalPrice: Math.round((cart.totalPrice - parseFloat(item.price)) * 100)/100,
       totalCount: cart.totalCount - 1,
     });
-    dispatch(cartActions.removeFromCart(item));
+    removeFromCart(item);
   }
 
   const isEmpty = () => {
@@ -160,8 +161,20 @@ const ShoppingCart = ({ navigation }) => {
 
 }
 
+const mapStateToProps = (item) => ({
+  item: item,
+})
 
-export default ShoppingCart;
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    addToCart: (item) => dispatch(cartActions.addToCart(item)),
+    removeFromCart: (item) => dispatch(cartActions.removeFromCart(item)),
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);
 
 
 const styles = StyleSheet.create({

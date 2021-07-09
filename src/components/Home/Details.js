@@ -30,7 +30,6 @@ const Details = ({route, navigation, addToCart}) => {
 
   const onClickOrderButton = () =>{
     onClickSizeOptions(selected);
-    //dispatch(cartActions.addToCart(item));
     addToCart(item);
   }
 
@@ -144,7 +143,6 @@ const mapStateToProps = (item) => ({
 
 
 const mapDispatchToProps = (dispatch) => {
-
   return {
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
   }
