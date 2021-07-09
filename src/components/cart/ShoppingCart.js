@@ -160,6 +160,7 @@ const ShoppingCart = ({ navigation }) => {
 
 }
 
+
 export default ShoppingCart;
 
 

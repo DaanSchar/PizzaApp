@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Image, FlatList, ScrollView } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'
 import colors from "../../../assets/colors/colors";
-import { useDispatch } from "react-redux";
+import { useDispatch, connect } from "react-redux";
 import * as cartActions from '../../store/cart/cartAction'
 import * as favActions from '../../store/favorites/favAction'
 import BackButton from "../BackButton";
@@ -15,6 +15,7 @@ const Details = ({route, navigation}) => {
   const dispatch = useDispatch();
   const [isFavorite, setIsFavorite] = useState(false);
   const [selected, setSelected] = useState(Object.keys(item.sizeOptions)[0]);
+  const [cart, setCart] = useState(store.getState().cart);
 
 
   useEffect(() => {
@@ -25,7 +26,8 @@ const Details = ({route, navigation}) => {
 
   const onClickOrderButton = () =>{
     onClickSizeOptions(selected);
-    dispatch(cartActions.addToCart(item));
+    //dispatch(cartActions.addToCart(item));
+    this.props.add();
   }
 
   // toggles the item's favorite status [true/false]
@@ -132,7 +134,19 @@ const Details = ({route, navigation}) => {
   )
 }
 
-export default Details;
+function mapStateToProps(state) {
+  return {
+    cart: state.cart,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    add : () => dispatch({type:'ADD_TO_CART'})
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Details);
 
 
 const styles = StyleSheet.create({
