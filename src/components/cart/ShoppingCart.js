@@ -10,13 +10,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useState, useEffect } from "react";
-import colors from "../../assets/colors/colors";
+import colors from "../../../assets/colors/colors";
 import Feather from 'react-native-vector-icons/Feather'
-import store from "../store/store";
+import store from "../../store/store";
 import BackButton from "../BackButton";
-import * as cartActions from '../store/cart/cartAction'
+import * as cartActions from '../../store/cart/cartAction'
 import { useDispatch } from "react-redux";
-import CartItem from "../store/cart/CartItem";
+import CartItem from "../../store/cart/CartItem";
 
 const ShoppingCart = ({ navigation }) => {
 

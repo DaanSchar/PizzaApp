@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Image, FlatList, ScrollView } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'
-import colors from "../../assets/colors/colors";
+import colors from "../../../assets/colors/colors";
 import { useDispatch } from "react-redux";
-import * as cartActions from '../store/cart/cartAction'
-import * as favActions from '../store/favorites/favAction'
+import * as cartActions from '../../store/cart/cartAction'
+import * as favActions from '../../store/favorites/favAction'
 import BackButton from "../BackButton";
-import store from "../store/store";
+import store from "../../store/store";
 import { useEffect, useState } from "react";
 
 const Details = ({route, navigation}) => {

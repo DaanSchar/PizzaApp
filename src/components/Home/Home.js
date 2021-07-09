@@ -15,17 +15,17 @@ import { useState, useEffect } from "react";
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
-import categoriesData from "../../assets/data/categoriesData";
-import PizzaData from "../../assets/data/foodData";
-import colors from "../../assets/colors/colors";
-import SeafoodData from "../../assets/data/SeafoodData";
-import DrinksData from "../../assets/data/DrinksData";
+import categoriesData from "../../../assets/data/categoriesData";
+import PizzaData from "../../../assets/data/foodData";
+import colors from "../../../assets/colors/colors";
+import SeafoodData from "../../../assets/data/SeafoodData";
+import DrinksData from "../../../assets/data/DrinksData";
 import CategoryItem from "./CategoryItem";
 import MenuButton from "../MenuButton";
 import { useDispatch } from "react-redux";
-import * as cartActions from '../store/cart/cartAction'
-import store from "../store/store";
-import foodData from "../../assets/data/foodData";
+import * as cartActions from '../../store/cart/cartAction'
+import store from "../../store/store";
+import foodData from "../../../assets/data/foodData";
 
 
 

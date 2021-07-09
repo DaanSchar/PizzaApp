@@ -1,6 +1,6 @@
 import { TouchableOpacity, View , StyleSheet} from "react-native";
 import Feather from "react-native-vector-icons/Feather";
-import colors from "../assets/colors/colors";
+import colors from "../../assets/colors/colors";
 import * as React from "react";
 
 

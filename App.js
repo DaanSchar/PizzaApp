@@ -3,10 +3,10 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import store from './components/store/store'
+import store from './src/store/store'
 import { Provider} from 'react-redux';
 
-import HomeStack from "./components/Home/HomeStack";
+import HomeStack from "./src/components/Home/HomeStack";
 
 const Drawer = createDrawerNavigator();
 
