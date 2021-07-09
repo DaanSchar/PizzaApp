@@ -29,6 +29,9 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
     incrementItemQuantity(item);
   }
 
+  useEffect(() => console.log('CHANGE'), [cart])
+
+
   const onClickRemoveButton = (item) => {
     if (item.quantity === 1)
       deleteItem(item);
@@ -37,24 +40,26 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
   }
 
   const incrementItemQuantity = (item) => {
-    setCart(
-      {
-        ...cart,
-        items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity+1), },
-        totalPrice: Math.round((cart.totalPrice + parseFloat(item.price)) * 100)/100,
-        totalCount: cart.totalCount + 1,
-      });
+    // setCart(
+    //   {
+    //     ...cart,
+    //     items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity+1), },
+    //     totalPrice: Math.round((cart.totalPrice + parseFloat(item.price)) * 100)/100,
+    //     totalCount: cart.totalCount + 1,
+    //   });
     addToCart(item);
+    setCart(store.getState().cart);
   }
 
   const decrementItemQuantity = (item) => {
-    setCart({
-      ...cart,
-      items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity - 1), },
-      totalPrice: Math.round((cart.totalPrice - parseFloat(item.price)) * 100)/100,
-      totalCount: cart.totalCount - 1,
-    });
+    // setCart({
+    //   ...cart,
+    //   items: { ...cart.items, [itemIndex(item)]: new CartItem(cart.items[itemIndex(item)], cart.items[itemIndex(item)].quantity - 1), },
+    //   totalPrice: Math.round((cart.totalPrice - parseFloat(item.price)) * 100)/100,
+    //   totalCount: cart.totalCount - 1,
+    // });
     removeFromCart(item);
+    setCart(store.getState().cart);
   }
 
   const isEmpty = () => {
@@ -83,7 +88,6 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart }) => {
 
   const itemIndex = (item) => {
     let index = item.id + item.size
-    console.log(index);
 
     return index
   }
@@ -168,6 +172,7 @@ const mapStateToProps = (item) => ({
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    dispatch,
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
     removeFromCart: (item) => dispatch(cartActions.removeFromCart(item)),
   }

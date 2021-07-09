@@ -1,4 +1,5 @@
 import CartItem from './CartItem'
+import { useEffect } from "react";
 const initialState = {
   items: [],
   totalCount: 0,
@@ -28,7 +29,7 @@ const addItemToState = (state, item) => {
 
   } else {
 
-    return {
+    return Object.assign({}, state,{
       ...state,
       items: {
         ...state.items,
@@ -36,7 +37,7 @@ const addItemToState = (state, item) => {
       },
       totalPrice: state.totalPrice + parseFloat(item.price),
       totalCount: state.totalCount + 1,
-    }
+    })
 
   }
 
@@ -62,7 +63,6 @@ const removeItemFromState = (state, item) => {
 
 const itemIndex = (item) => {
   let index = item.id + item.size
-  console.log(index);
 
   return index
 }
