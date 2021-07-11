@@ -12,8 +12,11 @@ export default (state = initialState, action) => {
     case 'REMOVE_FROM_CART':
       return removeItemFromState(state, action.item, action.index);
 
-    case "SET_CART":
-      return action.cart;
+    case "UPDATE_ITEM_SIZE":
+      return updateItemSize(state, action.index, action.size);
+
+    case 'ADD_NOTE':
+      return addNote(state, action.index, action.text);
   }
   return state;
 };
@@ -21,7 +24,7 @@ export default (state = initialState, action) => {
 const addItemToState = (state, item) => {
   return  {
     ...state,
-    items: [...state.items, item],
+    items: [...state.items, {...item}],
     totalPrice: refactorPrice(parseFloat(state.totalPrice) + parseFloat(item.price)),
 
   }
@@ -33,6 +36,31 @@ const removeItemFromState = (state, item, index) => {
     items: state.items.filter((pr, ind) => ind != index),
     totalPrice: refactorPrice(parseFloat(state.totalPrice) - parseFloat(item.price)),
   }
+}
+
+const updateItemSize = (state, index, size) => {
+
+  let items = state.items;
+  items[index].size = size;
+  let oldPrice = items[index].price;
+  items[index].price = items[index].sizeOptions[size]
+  let newPrice = items[index].price;
+
+  return {
+    ...state,
+    items: items,
+    totalPrice: refactorPrice(parseFloat(state.totalPrice) - parseFloat(oldPrice) + parseFloat(newPrice)),
+  }
+}
+
+const addNote = (state, index, text) => {
+   let items = state.items;
+   items[index].notes = text;
+
+   return {
+     ...state,
+     items: items,
+   }
 }
 
 const refactorPrice = (totalPrice) => {

@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     fontSize: 32,
     color: colors.textDark,
-    width: '50%',
+    width: '60%',
   },
   sizeOptionWrapper: {
     marginTop: 5,

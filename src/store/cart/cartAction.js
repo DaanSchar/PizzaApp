@@ -6,6 +6,10 @@ export const removeFromCart = (item, index) => {
   return { type: 'REMOVE_FROM_CART', item: item, index: index};
 }
 
-export const setCart = (cart) => {
-  return { type: 'SET_CART', cart: cart};
+export const updateItemSize = (index, size) => {
+  return { type: 'UPDATE_ITEM_SIZE',  index: index, size: size};
+}
+
+export const addNote = (index, text) => {
+  return { type: 'ADD_NOTE', index: index, text: text};
 }

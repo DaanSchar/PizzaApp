@@ -8,6 +8,7 @@ import {
   FlatList,
   ScrollView,
   TouchableOpacity,
+  Modal, TextInput,
 } from "react-native";
 import { useState, useEffect } from "react";
 import colors from "../../../assets/colors/colors";
@@ -19,8 +20,11 @@ import { useDispatch } from "react-redux";
 import CartItem from "../../store/cart/CartItem";
 import connect from "react-redux/lib/connect/connect";
 
-const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPrice}) => {
+const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPrice, updateItemSize, addNote}) => {
 
+  const [clicked, setClicked] = useState(false);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+  const [notes, setNotes] =  useState('');
 
   const onClickAddButton = (item) => {
     addToCart(item);
@@ -30,15 +34,70 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
     removeFromCart(item, index);
   }
 
+  const onClickEditButton = (index) => {
+    setClicked(!clicked);
+    setSelectedItemIndex(index);
+  }
+
   const isEmpty = () => {
     if (items === undefined)
       return true;
     return Object.keys(items).length === 0
   }
 
+  const onClickSizeOptions = (size) => {
+    updateItemSize(selectedItemIndex, size);
+  }
+
+  const editNotes = (text) => {
+    addNote(selectedItemIndex, text);
+  }
+
+  const renderSizeOptions = () => {
+
+    let item = items[selectedItemIndex];
+
+    if (item === undefined)
+      return (null);
+
+    return (
+      Object.keys(item.sizeOptions).map((size) =>
+        <TouchableOpacity key={size} style={[styles.sizeOptionButton, item.size === size ? { backgroundColor: colors.primary } : { }]} onPress={() => onClickSizeOptions(size)}>
+          <Text style={styles.sizeText}>{size}</Text>
+        </TouchableOpacity>)
+    )
+  }
+
   return (
     <ScrollView>
+
       <View style={styles.container}>
+
+        {/* edit window */}
+        <Modal transparent={true} visible={clicked}>
+          <View style={styles.modalWrapper}>
+            <View style={styles.modalItem}>
+
+              <View style={styles.modalItemTopWrapper}>
+                <View style={styles.modalTitleWrapper}>
+                  <Feather style={styles.editIcon} name='edit' size={24} color={colors.textDark}/>
+                  <Text style={styles.editOrderTitle}>Edit Order</Text>
+                </View>
+                <TouchableOpacity onPress={() => setClicked(!clicked)}>
+                  <Feather style={styles.closeIcon} name='x' size={24} color={colors.textDark}/>
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.selectSizeWrapper}>
+                {renderSizeOptions()}
+              </View>
+
+              <View style={styles.noteWrapper}>
+                <TextInput styles={styles.noteTextField} placeholder={"Notes"} onChangeText={text => editNotes(text) }>{items[selectedItemIndex] ? ('notes' in items[selectedItemIndex] ? items[selectedItemIndex].notes : null) : null}</TextInput>
+              </View>
+            </View>
+          </View>
+        </Modal>
 
         <View style={styles.headerWrapper}>
           <BackButton navigation={navigation}/>
@@ -46,7 +105,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
 
         <View style={styles.titleWrapper}>
           <Text style={styles.titleHead}>Shopping Cart</Text>
-          <TouchableOpacity onPress={() => { console.log(store.getState().cart); }}>
+          <TouchableOpacity onPress={() => { console.log(JSON.stringify(store.getState().cart, null, 2)); }}>
             <Text style={styles.titleSub}>Orders</Text>
           </TouchableOpacity>
         </View>
@@ -60,31 +119,33 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
         {/* item list */}
         <View style={styles.itemListWrapper}>
           {
-            isEmpty() ? null : Object.entries(items).map(([index, item]) =>
+            isEmpty() ? null : Object.entries(items).slice(0).reverse().map(([index, item]) =>
             (
               <View key={index} style={styles.itemWrapper}>
+
               <View style={styles.topSideWrapper}>
 
                 <View style={styles.titleItemWrapper}>
                   <Text style={styles.itemNameTitle}>{item.title} {item.size}</Text>
                   <Text style={styles.itemPriceTitle}>{item.price}$</Text>
-
                 </View>
 
-              {/*  function bar */}
+                <TouchableOpacity onPress={() => onClickEditButton(index)}>
+                  <Feather style={styles.editIcon} name='edit' size={24} color={colors.textDark}/>
+                </TouchableOpacity>
+
               </View>
+
+                {/*  function bar */}
                 <View style={styles.functionsWrapper}>
 
                   <TouchableOpacity style={styles.removeButton} onPress={() => onClickRemoveButton(item, index)}>
-                    <Feather name='minus'/>
+                    <Feather name='trash-2' size={20}/>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.quantityContainer}>
-                    <Text style={styles.itemQuantityTitle}>Notes</Text>
-                  </TouchableOpacity>
 
                   <TouchableOpacity style={styles.addButton} onPress={() => onClickAddButton(item)}>
-                    <Feather name='plus'/>
+                    <Feather name='plus' size={20}/>
                   </TouchableOpacity>
                 </View>
 
@@ -120,6 +181,8 @@ const mapDispatchToProps = (dispatch) => {
     dispatch,
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
     removeFromCart: (item, index) => dispatch(cartActions.removeFromCart(item, index)),
+    updateItemSize: (index, size) => dispatch(cartActions.updateItemSize(index, size)),
+    addNote: (index, text) => dispatch(cartActions.addNote(index, text)),
   }
 }
 
@@ -128,8 +191,70 @@ export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);
 
 
 const styles = StyleSheet.create({
+  modalItemTopWrapper: {
+    flexDirection: 'row',
+    marginHorizontal: 20,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  closeIcon: {
+    marginLeft: 5,
+    alignSelf: 'center',
+  },
+  sizeOptionButton: {
+    backgroundColor: colors.white,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    marginRight: 10,
+  },
+  selectSizeWrapper: {
+    marginTop: 30,
+    marginHorizontal: 40,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  modalTitleWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 50,
+  },
+  editOrderTitle: {
+    fontFamily: 'Montserrat-Bold',
+    fontSize: 32,
+    color: colors.textDark,
+    marginRight: 16,
+  },
+  noteTextField: {
+    marginBottom: 20,
+    marginLeft: 30,
+  },
+  noteWrapper:{
+    marginTop: 20,
+    backgroundColor: colors.white,
+    marginHorizontal: 20,
+    borderRadius: 20,
+  },
+  modalItem: {
+    marginHorizontal: 20,
+    marginTop: 90,
+    backgroundColor: colors.background,
+    borderRadius: 20,
+    flexDirection: 'column',
+    paddingBottom: 30,
+  },
+  modalWrapper: {
+    backgroundColor: '#000000aa',
+    flex: 1,
+  },
   container: {
     flex: 1,
+  },
+  editIcon: {
+    marginRight: 5,
+    alignSelf: 'center',
   },
   itemWrapper: {
     flexDirection: 'column',
@@ -168,6 +293,7 @@ const styles = StyleSheet.create({
   topSideWrapper: {
     flexDirection: 'row',
     paddingHorizontal: 10,
+    justifyContent: 'space-between',
   },
   titleItemWrapper: {
     flexDirection: 'column',
@@ -177,6 +303,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Montserrat-Bold',
     fontSize: 20,
     color: colors.textDark,
+    width: '80%',
   },
   itemPriceTitle: {
     marginTop: 5,
@@ -226,14 +353,15 @@ const styles = StyleSheet.create({
   removeButton: {
     backgroundColor: colors.secondary,
     paddingHorizontal: 40,
-    paddingVertical: 20,
+    paddingVertical: 10,
     borderTopRightRadius: 25,
     borderBottomLeftRadius: 25,
+    justifyContent: 'center',
   },
   addButton: {
     backgroundColor: colors.primary,
     paddingHorizontal: 40,
-    paddingVertical: 20,
+    paddingVertical: 15,
     borderTopLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
