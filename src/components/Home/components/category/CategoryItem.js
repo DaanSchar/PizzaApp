@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'
-import colors from "../../../assets/colors/colors";
+import colors from "../../../../../assets/colors/colors";
 
 const CategoryItem = (props) => {
   let { item } = props.item;
@@ -33,14 +33,6 @@ const styles = StyleSheet.create({
   categoryItemWrapper: {
     marginRight: 20,
     borderRadius: 20,
-    // shadowColor: colors.black,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.05,
-    // shadowRadius: 10,
-    // elevation: 2,
   },
   categoryItemImage: {
     width: 60,

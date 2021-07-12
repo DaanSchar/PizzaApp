@@ -1,10 +1,10 @@
 
 import 'react-native-gesture-handler';
 import * as React from 'react';
-import Home from "./Home";
+import Home from "../Home";
 import Details from "./Details";
 import { createStackNavigator } from '@react-navigation/stack';
-import ShoppingCart from '../cart/ShoppingCart'
+import ShoppingCart from '../../cart/ShoppingCart'
 
 const Stack = createStackNavigator();
 

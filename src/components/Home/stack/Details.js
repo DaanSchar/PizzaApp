@@ -1,19 +1,18 @@
 import * as React from 'react';
 import { Text, View, StyleSheet, SafeAreaView, TouchableOpacity, Image, FlatList, ScrollView } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'
-import colors from "../../../assets/colors/colors";
+import colors from "../../../../assets/colors/colors";
 import { connect } from "react-redux";
-import * as cartActions from '../../store/cart/cartAction'
-import * as favActions from '../../store/favorites/favAction'
-import BackButton from "../BackButton";
-import store from "../../store/store";
+import * as cartActions from '../../../store/cart/cartAction'
+import * as favActions from '../../../store/favorites/favAction'
+import BackButton from "../../BackButton";
+import store from "../../../store/store";
 import { useEffect, useState } from "react";
 
 const Details = ({route, navigation, addToCart, addToFav}) => {
 
   /**
-   *  the add function for the store is called
-   *  inside onClickOrderButton()
+   *  TODO: Fix unFavorite functionality
    */
 
   let { item } = route.params;
@@ -136,7 +135,7 @@ const Details = ({route, navigation, addToCart, addToFav}) => {
   )
 }
 
-const mapStateToProps = ({cart, favorites}) => ({
+let mapStateToProps = ({cart, favorites}) => ({
     items: cart.items,
     favorites: favorites.items,
   }

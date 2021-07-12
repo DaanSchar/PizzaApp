@@ -17,7 +17,6 @@ import store from "../../store/store";
 import BackButton from "../BackButton";
 import * as cartActions from '../../store/cart/cartAction'
 import { useDispatch } from "react-redux";
-import CartItem from "../../store/cart/CartItem";
 import connect from "react-redux/lib/connect/connect";
 
 const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPrice, updateItemSize, addNote}) => {
@@ -69,8 +68,6 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
   }
 
   return (
-    <ScrollView>
-
       <View style={styles.container}>
 
         {/* edit window */}
@@ -118,23 +115,32 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
 
         {/* item list */}
         <View style={styles.itemListWrapper}>
-          {
-            isEmpty() ? null : Object.entries(items).slice(0).reverse().map(([index, item]) =>
-            (
-              <View key={index} style={styles.itemWrapper}>
 
-              <View style={styles.topSideWrapper}>
+          <FlatList style={styles.flatList}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    contentInsetAdjustmentBehavior={'automatic'}
+                    data={Object.entries(items).slice(0).reverse()}
+                    keyExtractor={(item, index) => index}
+                    renderItem={({ index }) => {
 
-                <View style={styles.titleItemWrapper}>
-                  <Text style={styles.itemNameTitle}>{item.title} {item.size}</Text>
-                  <Text style={styles.itemPriceTitle}>{item.price}$</Text>
+            let item=items[index];
+
+            return (
+              <View style={styles.itemWrapper}>
+
+                <View style={styles.topSideWrapper}>
+
+                  <View style={styles.titleItemWrapper}>
+                    <Text style={styles.itemNameTitle}>{item.title} {item.size}</Text>
+                    <Text style={styles.itemPriceTitle}>{item.price}$</Text>
+                  </View>
+
+                  <TouchableOpacity onPress={() => onClickEditButton(index)}>
+                    <Feather style={styles.editIcon} name='edit' size={24} color={colors.textDark}/>
+                  </TouchableOpacity>
+
                 </View>
-
-                <TouchableOpacity onPress={() => onClickEditButton(index)}>
-                  <Feather style={styles.editIcon} name='edit' size={24} color={colors.textDark}/>
-                </TouchableOpacity>
-
-              </View>
 
                 {/*  function bar */}
                 <View style={styles.functionsWrapper}>
@@ -150,9 +156,7 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
                 </View>
 
               </View>
-            ))}
-        </View>
-
+            )}}/>
         {/* pre-checkout bottom part*/}
         { isEmpty() ? null :
           <View style={styles.bottomWrapper}>
@@ -163,14 +167,13 @@ const ShoppingCart = ({ navigation, addToCart, removeFromCart , items, totalPric
               </TouchableOpacity>
           </View>
         }
-
+        </View>
       </View>
-    </ScrollView>
   )
 
 }
 
-const mapStateToProps = ({ cart }) => ({
+let mapStateToProps = ({ cart }) => ({
   items: cart.items,
   totalPrice: cart.totalPrice,
 })
@@ -191,7 +194,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);
 
 
 const styles = StyleSheet.create({
+  flatList: {
+  },
   modalItemTopWrapper: {
+    marginTop: 10,
     flexDirection: 'row',
     marginHorizontal: 20,
     justifyContent: 'space-between',
@@ -260,12 +266,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: colors.white,
     paddingTop: 20,
-    marginBottom: 20,
+    marginTop: 20,
     borderRadius: 25,
   },
   titleWrapper: {
     marginTop: 10,
-    marginBottom: 30,
+    marginBottom: 15,
     paddingHorizontal: 20,
   },
   titleHead: {
@@ -284,11 +290,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
     alignItems: 'center',
-    paddingBottom: 10,
   },
   itemListWrapper: {
     paddingHorizontal: 20,
-    marginTop: 20,
+    marginBottom: 280,
   },
   topSideWrapper: {
     flexDirection: 'row',
@@ -370,7 +375,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   totalPriceTitle: {
-    marginTop: 40,fontFamily: 'Montserrat-SemiBold',
+    marginTop: 20,
+    fontFamily: 'Montserrat-SemiBold',
     fontSize: 16,
     color: colors.textDark,
   },
