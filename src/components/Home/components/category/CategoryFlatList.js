@@ -8,7 +8,6 @@ import * as categoryAction from '../../../../store/category/catAction'
 
 const CategoryFlatList = ({ select, selected }) => {
 
-  // sets the selected category item
   const selectCategoryItem = ({ item }) => {
     if (selected === item.title)
       select('')
@@ -16,7 +15,6 @@ const CategoryFlatList = ({ select, selected }) => {
       select(item.title);
   }
 
-  // returns the view components for the category item
   const renderCategoryItem = (item) => {
     return(
       <TouchableOpacity onPress={() => selectCategoryItem(item)}>

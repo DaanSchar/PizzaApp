@@ -5,7 +5,7 @@ import colors from "../../../../assets/colors/colors";
 import { connect } from "react-redux";
 import * as cartActions from '../../../store/cart/cartAction'
 import * as favActions from '../../../store/favorites/favAction'
-import BackButton from "../../BackButton";
+import BackButton from "../../menuheader/BackButton";
 import store from "../../../store/store";
 import { useEffect, useState } from "react";
 
@@ -13,6 +13,7 @@ const Details = ({route, navigation, addToCart, addToFav}) => {
 
   /**
    *  TODO: Fix unFavorite functionality
+   *  TODO: Clean this up
    */
 
   let { item } = route.params;

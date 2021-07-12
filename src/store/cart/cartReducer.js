@@ -1,7 +1,10 @@
 const initialState = {
   items: [],
   totalCount: 0,
-  totalPrice: 0};
+  totalPrice: 0,
+  modalIsVisible: false,
+  selectedItem: -1,
+};
 
 export default (state = initialState, action) => {
 
@@ -17,6 +20,12 @@ export default (state = initialState, action) => {
 
     case 'ADD_NOTE':
       return addNote(state, action.index, action.text);
+
+    case 'TOGGLE_MODAL_VISIBLE':
+      return toggleModalVisible(state);
+
+    case 'SET_SELECTED_ITEM':
+      return setSelectedItem(state, action.selected);
   }
   return state;
 };
@@ -40,17 +49,18 @@ const removeItemFromState = (state, item, index) => {
 
 const updateItemSize = (state, index, size) => {
 
-  let items = state.items;
-  items[index].size = size;
-  let oldPrice = items[index].price;
-  items[index].price = items[index].sizeOptions[size]
-  let newPrice = items[index].price;
+  let itemList = state.items;
+  itemList[index].size = size;
+  let oldPrice = itemList[index].price;
+  itemList[index].price = itemList[index].sizeOptions[size]
+  let newPrice = itemList[index].price;
 
   return {
     ...state,
-    items: items,
+    items: [...itemList],
     totalPrice: refactorPrice(parseFloat(state.totalPrice) - parseFloat(oldPrice) + parseFloat(newPrice)),
   }
+
 }
 
 const addNote = (state, index, text) => {
@@ -74,6 +84,20 @@ const refactorPrice = (totalPrice) => {
         return totalPrice.toString() + '0';
   }
   return totalPrice.toString();
+}
+
+const toggleModalVisible = (state) => {
+  return {
+    ...state,
+    modalIsVisible: !state.modalIsVisible,
+  }
+}
+
+const setSelectedItem = (state, selected) => {
+  return {
+    ...state,
+    selectedItem: selected,
+  }
 }
 
 

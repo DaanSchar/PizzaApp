@@ -1,6 +1,6 @@
 import { TouchableOpacity, View , StyleSheet} from "react-native";
 import Feather from "react-native-vector-icons/Feather";
-import colors from "../../assets/colors/colors";
+import colors from "../../../assets/colors/colors";
 import * as React from "react";
 
 
@@ -21,6 +21,8 @@ export default  MenuButton;
 
 const styles = StyleSheet.create({
   styling: {
+    width: 40,
+    height: 40,
     borderColor: colors.textLight,
     borderWidth: 2,
     padding: 12,

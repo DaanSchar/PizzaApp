@@ -3,25 +3,14 @@ import {
   Text,
   View,
   StyleSheet,
-  SafeAreaView,
-  Image,
   ScrollView,
-  TouchableOpacity,
-  TextInput,
 } from "react-native";
-import { useState, useEffect } from "react";
-
-import Feather from 'react-native-vector-icons/Feather'
-
 import colors from "../../../assets/colors/colors";
-import MenuButton from "../MenuButton";
 import { connect, useDispatch } from "react-redux";
-import * as cartActions from '../../store/cart/cartAction'
-import store from "../../store/store";
-import foodData from "../../../assets/data/foodData";
 import CategoryFlatList from "./components/category/CategoryFlatList";
-import ItemFlatList from "./components/ItemFlatList";
+import ItemFlatList from "./components/itemlist/FoodItemFlatList";
 import SearchBar from "./components/SearchBar";
+import MenuHeader from "../menuheader/MenuHeader";
 
 
 
@@ -35,44 +24,38 @@ const Home = ({ navigation, selected, favorites}) => {
         contentInsetAdjustmentBehavior={'automatic'}
       >
 
-      {/* header */}
-      <SafeAreaView>
-        <View style={styles.headerWrapper}>
+        {/* header */}
+        <MenuHeader navigation={navigation}/>
 
-          <MenuButton navigation={navigation}/>
-          <TouchableOpacity onPress={() =>  navigation.navigate('Shopping Cart')}>
-            <Feather name='shopping-cart' size={24} color={colors.textDark}></Feather>
-          </TouchableOpacity>
-
+        {/* Titles */}
+        <View style={styles.titleWrapper}>
+          <Text style={styles.titleSubTitle}>Food</Text>
+          <Text style={styles.titlesTitle}t>Delivery</Text>
         </View>
-      </SafeAreaView>
 
-      {/* Titles */}
-      <View style={styles.titleWrapper}>
-
-        <Text style={styles.titleSubTitle}>Food</Text>
-        <Text style={styles.titlesTitle}t>Delivery</Text>
-      </View>
-
-      {/* Search */}
-      <SearchBar/>
-
-      {/* Categories */}
-      <View style={styles.categoriesWrapper}>
-        <Text style={styles.categoriesTitle}>Categories</Text>
-        <View style={styles.categoriesListWrapper}>
-          <CategoryFlatList/>
+        {/* Search Bar */}
+        <View>
+          <SearchBar/>
         </View>
-      </View>
 
-      {/*  Food Items */}
-      <View style={styles.foodItemWrapper}>
-        <Text style={styles.foodItemTitle}>{selected}</Text>
-        {
-          favorites.length === 0 && selected === 'Favorites' ? <Text style={styles.noFavItemsTitle}>No Favorites...</Text> : <ItemFlatList navigation={navigation}/>
-        }
-      </View>
-    </ScrollView>
+        {/* Categories */}
+        <View style={styles.categoriesWrapper}>
+          <Text style={styles.categoriesTitle}>Categories</Text>
+          <View style={styles.categoriesListWrapper}>
+            <CategoryFlatList/>
+          </View>
+        </View>
+
+        {/* Food Items */}
+        <View style={styles.foodItemWrapper}>
+          <Text style={styles.foodItemTitle}>{selected}</Text>
+          {
+            favorites.length === 0 && selected === 'Favorites' ?
+            <Text style={styles.noFavItemsTitle}>No Favorites...</Text> : <ItemFlatList navigation={navigation}/>
+          }
+        </View>
+
+      </ScrollView>
     </View>
   )
 
@@ -91,15 +74,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-  },
-  headerWrapper: {
-    backgroundColor: colors.textLight,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 10,
-    alignItems: 'center',
-    paddingBottom: 10,
   },
   titleWrapper: {
     marginTop: 30,

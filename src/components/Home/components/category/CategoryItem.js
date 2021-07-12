@@ -4,7 +4,6 @@ import {
   View,
   StyleSheet,
   Image,
-  TouchableOpacity,
 } from "react-native";
 import Feather from 'react-native-vector-icons/Feather'
 import colors from "../../../../../assets/colors/colors";
@@ -14,17 +13,17 @@ const CategoryItem = (props) => {
   let isSelected = props.selected === item.title;
 
   return(
-    <View style={[styles.categoryItemWrapper, {
-      backgroundColor: isSelected ? colors.primary : colors.white,
-      marginLeft: item.id==='1' ? 20 : 0
-    }]}>
+    <View style={[styles.categoryItemWrapper, { backgroundColor: isSelected ? colors.primary : colors.white, marginLeft: item.id==='1' ? 20 : 0 }]}>
+
+      {/* centre */}
       <Image source={item.image} style={styles.categoryItemImage}/>
       <Text style={styles.categoryItemTitle}>{item.title}</Text>
-      <View style={[styles.categorySelectWrapper, {
-        backgroundColor: isSelected ? colors.white : colors.secondary,
-      }]}>
+
+      {/* bottom button */}
+      <View style={[styles.categorySelectWrapper, { backgroundColor: isSelected ? colors.white : colors.secondary, }]}>
         <Feather name="chevron-right" size={8} style={styles.categorySelectIcon}  color={isSelected ? colors.black : colors.white}/>
       </View>
+
     </View>
   )
 }
