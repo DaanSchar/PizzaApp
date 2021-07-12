@@ -6,7 +6,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import store from './src/store/store'
 import { Provider} from 'react-redux';
 
-import HomeStack from "./src/components/Home/stack/HomeStack";
+import HomeStack from "./src/navigation/HomeStack";
 
 const Drawer = createDrawerNavigator();
 
