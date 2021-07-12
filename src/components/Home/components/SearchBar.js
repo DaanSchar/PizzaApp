@@ -5,9 +5,6 @@ import Feather from "react-native-vector-icons/Feather";
 import colors from "../../../../assets/colors/colors";
 import * as React from "react";
 
-/**
- * TODO: Fix search bar styling.
- */
 
 const SearchBar = ({ setText }) => {
   return (
@@ -32,10 +29,9 @@ const mapDispatchToProps = (dispatch) => {
 
 const styles = StyleSheet.create({
   searchWrapper:  {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 20,
-    marginTop: 20,
   },
   searchText: {
     fontFamily: 'Montserrat-SemiBold',
@@ -47,6 +43,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     borderBottomColor: colors.textLight,
     borderBottomWidth: 2,
+    width: '80%',
   },
 })
 

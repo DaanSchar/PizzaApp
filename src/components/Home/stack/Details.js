@@ -9,7 +9,7 @@ import BackButton from "../../menuheader/BackButton";
 import store from "../../../store/store";
 import { useEffect, useState } from "react";
 
-const Details = ({route, navigation, addToCart, addToFav}) => {
+const Details = ({route, navigation, addToCart, addToFav, removeFromFav}) => {
 
   /**
    *  TODO: Fix unFavorite functionality
@@ -38,7 +38,7 @@ const Details = ({route, navigation, addToCart, addToFav}) => {
     if (!isFavorite)
       addToFav(item);
     if (isFavorite)
-      addToFav(item);
+      removeFromFav(item);
   }
 
   // checks if an item is already set as favorite
@@ -147,6 +147,7 @@ const mapDispatchToProps = (dispatch) => {
     dispatch,
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
     addToFav: (item) => dispatch(favActions.addToFav(item)),
+    removeFromFav: (item) => dispatch(favActions.removeFromFav(item)),
   }
 }
 

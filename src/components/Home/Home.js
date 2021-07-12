@@ -34,9 +34,7 @@ const Home = ({ navigation, selected, favorites}) => {
         </View>
 
         {/* Search Bar */}
-        <View>
           <SearchBar/>
-        </View>
 
         {/* Categories */}
         <View style={styles.categoriesWrapper}>
