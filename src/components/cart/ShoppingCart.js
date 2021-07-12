@@ -59,10 +59,8 @@ const ShoppingCart = ({ navigation, items, totalPrice, selectedItem}) => {
 
         {/* edit modal */}
         <EditViewModal foodItemIndex={selectedItem}/>
-
       </View>
   )
-
 }
 
 
