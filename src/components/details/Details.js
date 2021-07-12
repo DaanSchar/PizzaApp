@@ -5,52 +5,24 @@ import colors from "../../../assets/colors/colors";
 import { connect } from "react-redux";
 import * as cartActions from '../../store/cart/cartAction'
 import * as favActions from '../../store/favorites/favAction'
-import BackButton from "../BackButton";
+import BackButton from "../menuheader/BackButton";
 import store from "../../store/store";
 import { useEffect, useState } from "react";
+import FavButton from "./components/FavButton";
 
-const Details = ({route, navigation, addToCart, addToFav}) => {
-
-  /**
-   *  the add function for the store is called
-   *  inside onClickOrderButton()
-   */
+const Details = ({route, navigation, addToCart}) => {
 
   let { item } = route.params;
-  const [isFavorite, setIsFavorite] = useState(false);
   const [selected, setSelected] = useState(Object.keys(item.sizeOptions)[0]);
 
 
   useEffect(() => {
-    setIsFavorite(checkIfFavorite());
     onClickSizeOptions(Object.keys(item.sizeOptions)[0])
   }, [])
-
 
   const onClickOrderButton = () =>{
     onClickSizeOptions(selected);
     addToCart(item);
-  }
-
-  // toggles the item's favorite status [true/false]
-  const onClickFavButton = () => {
-    setIsFavorite(!isFavorite);
-    if (!isFavorite)
-      addToFav(item);
-    if (isFavorite)
-      addToFav(item);
-  }
-
-  // checks if an item is already set as favorite
-  const checkIfFavorite = () => {
-    let favorites = store.getState().favorites.items;
-
-    for (let i = 0; i < favorites.length; i++) {
-      if (favorites[i].title === item.title) {
-        return true;
-      }
-    }
-    return false;
   }
 
   const onClickSizeOptions = (sizeOption) =>
@@ -80,17 +52,13 @@ const Details = ({route, navigation, addToCart, addToFav}) => {
   return(
     <ScrollView>
       <View style={styles.container}>
+
         {/*  header */}
         <SafeAreaView>
           <View style={styles.headerWrapper}>
 
             <BackButton navigation={navigation}/>
-
-            <TouchableOpacity onPress={() => onClickFavButton()}>
-              <View style={[styles.favButton, isFavorite ? { backgroundColor: colors.primary } : { backgroundColor: null }]}>
-                <Feather name='star' size={12} color={colors.white}/>
-              </View>
-            </TouchableOpacity>
+            <FavButton item={item}/>
 
           </View>
         </SafeAreaView>
@@ -136,7 +104,7 @@ const Details = ({route, navigation, addToCart, addToFav}) => {
   )
 }
 
-const mapStateToProps = ({cart, favorites}) => ({
+let mapStateToProps = ({cart, favorites}) => ({
     items: cart.items,
     favorites: favorites.items,
   }
@@ -146,7 +114,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     dispatch,
     addToCart: (item) => dispatch(cartActions.addToCart(item)),
-    addToFav: (item) => dispatch(favActions.addToFav(item)),
   }
 }
 
@@ -163,12 +130,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 20,
-  },
-  favButton: {
-    padding: 12,
-    borderRadius: 10,
-    borderWidth: 2,
-    borderColor: colors.primary,
   },
   titlesWrapper: {
     paddingHorizontal: 20,

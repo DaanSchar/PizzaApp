@@ -13,3 +13,11 @@ export const updateItemSize = (index, size) => {
 export const addNote = (index, text) => {
   return { type: 'ADD_NOTE', index: index, text: text};
 }
+
+export const toggleModalVisible = () => {
+  return { type: 'TOGGLE_MODAL_VISIBLE'};
+}
+
+export const setSelectedItem = (selected) => {
+  return { type: 'SET_SELECTED_ITEM', selected: selected}
+}
